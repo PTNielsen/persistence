@@ -1,7 +1,11 @@
 class Stat < ActiveRecord::Base
+ 
+  belongs_to :users
 
-  belongs_to :user
+  validates_presence_of :winner_id, :loser_id
 
-  validates_presence_of :winner, :loser
+  def record_result ttt
+    Stat.create! winning_id: ttt.winning_player.database_user.id, losing_id: ttt.losing_player.database_user.id
+  end
 
 end

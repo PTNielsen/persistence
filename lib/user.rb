@@ -1,16 +1,18 @@
 class User < ActiveRecord::Base
 
-  has_many :stats, through: :game
+  has_many :stats
 
   validates_presence_of :wins, :losses
-  validates_uniqueness_of :name
+  validates :name, presence: true, uniqueness: true
 
-  def self.wins
-    wins
+  def wins
+    win_count = Stat.where(winner_id: id).count
+    return win_count
   end
 
-  def self.loses 
-    loses
+  def losses
+    loss_count = Stat.where(loser_id: id).count
+    return loss_count
   end
 
 end

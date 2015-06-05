@@ -2,9 +2,8 @@ class CreateStats < ActiveRecord::Migration
   
   def change
     create_table "stats" do |t|
-      t.integer "user_1_id"
-      t.integer "user_2_id"
-      t.integer "winner"
+      t.integer "winner_id"
+      t.integer "loser_id"
       t.datetime "created_at"
     end
   end

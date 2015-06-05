@@ -1,12 +1,14 @@
 require './db/setup'
 require './lib/all'
 
+require 'pry'
+
 class Player
-  attr_reader :symbol, :name
+  attr_reader :symbol, :name, :player, :database_user
 
   def initialize symbol
     @symbol = symbol
-    print "Player #{symbol}! What is your name? "
+    print "Player #{symbol}! What is your name?: "
     @name = gets.capitalize.chomp
     player = User.where(name: name).first
       if player
@@ -15,7 +17,8 @@ class Player
         player = User.create! name: name, wins: 0, losses: 0
         puts "Welcome, #{player.name}!"
       end
-  end
+      @database_user = player
+  end 
 
 end
 
@@ -70,6 +73,26 @@ class TicTacToe
     return nil # no winner yet
   end
 
+  def winning_player
+    if winner == :x
+      @players.first
+    elsif winner == :o
+      @players.last
+    else
+      nil
+    end
+  end
+
+  def losing_player
+    if winner == :x
+      @players.last
+    elsif winner == :o
+      @players.first
+    else
+      nil
+    end
+  end
+
   def display_board
     "#{display_row(1,2,3)}\n#{display_row(4,5,6)}\n#{display_row(7,8,9)}"
   end
@@ -90,21 +113,22 @@ class TicTacToe
       @current_player = @players.first
     end
   end
+
 end
 
+  ttt = TicTacToe.new
 
-ttt = TicTacToe.new
+  until ttt.over?
+    puts ttt.display_board
+    print "#{ttt.current_player.name} - where would you like to play? "
+    move = gets.chomp
+    ttt.take_move move
+  end
 
-until ttt.over?
-  puts ttt.display_board
-  print "#{ttt.current_player.name} - where would you like to play? "
-
-  move = gets.chomp
-  ttt.take_move move
-end
-
-if ttt.winner
-  puts "#{ttt.winner} wins!"
-else
-  puts "It's a draw"
-end
+   if ttt.winner
+    puts ttt.display_board
+    puts "#{ttt.winning_player.database_user.name} wins!"
+    record_result
+  else
+    puts "It's a draw"
+  end
