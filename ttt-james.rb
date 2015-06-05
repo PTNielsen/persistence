@@ -128,7 +128,7 @@ end
    if ttt.winner
     puts ttt.display_board
     puts "#{ttt.winning_player.database_user.name} wins!"
-    record_result
+    Stat.record_result(ttt)
   else
     puts "It's a draw"
   end

@@ -4,8 +4,8 @@ class Stat < ActiveRecord::Base
 
   validates_presence_of :winner_id, :loser_id
 
-  def record_result ttt
-    Stat.create! winning_id: ttt.winning_player.database_user.id, losing_id: ttt.losing_player.database_user.id
+  def self.record_result ttt
+    Stat.create! winner_id: ttt.winning_player.database_user.id, loser_id: ttt.losing_player.database_user.id
   end
 
 end
